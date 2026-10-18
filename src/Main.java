@@ -1,3 +1,5 @@
+import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
 import java.util.LinkedList;
 
 import java.io.File;
@@ -9,22 +11,27 @@ import java.util.function.Function;
  * This models the execution of processes on a CPU.
  *
  * @author "Anna Brötzner, Malmö university"
- * @since 2.0
+ * @since 3.0
  */
 
 public class Main {
     public static void main(String[] args) {
-        LinkedList<Process> allProcesses = loadProcesses(System.getProperty("user.dir") + "/data/rr_ex1.txt");
+        String path = System.getProperty("user.dir") + "/data/ex1.txt";
+        LinkedList<Process> allProcesses = loadProcesses(path);
 
-        SchedulingSchemes fcfs = new SchedulingSchemes("FCFS", false);
+        SchedulingSchemes fcfs = new SchedulingSchemes("FCFS");
+        Boolean preemptive = false;
 
-        run(allProcesses, fcfs);
+        run(allProcesses, fcfs, preemptive);
+
+        exportProcesses(path, allProcesses);
     }
 
     // By default, the run()-method is called with quantum = 1.
     public static void run(LinkedList<Process> listOfProcesses,
-                           SchedulingSchemes scheme) {
-        run(listOfProcesses, scheme, 1);
+                           SchedulingSchemes scheme,
+                           Boolean preemptive) {
+        run(listOfProcesses, scheme, preemptive, 1);
     }
 
     /** To do for VG:
@@ -33,10 +40,19 @@ public class Main {
      */
     public static void run(LinkedList<Process> listOfProcesses,
                            SchedulingSchemes scheme,
+                           Boolean preemptive,
                            int quantum) {
         int n = listOfProcesses.size();
         LinkedList<Process> queue = new LinkedList<>();
         int index = 0;
+
+        // Set the scheduling scheme
+        Function<LinkedList<Process>, Process> schedulingScheme;
+        switch(scheme.name) {
+            default:
+                schedulingScheme = SchedulingSchemes::fcfs;
+                break;
+        }
 
         Process pNext = new Process();
         int completed = 0;
@@ -54,13 +70,6 @@ public class Main {
          *   as this makes the verification of your output more difficult.
          */
         while(completed < n) {
-            // Set the scheduling scheme
-            Function<LinkedList<Process>, Process> schedulingScheme;
-            switch(scheme.name) {
-                default:
-                    schedulingScheme = SchedulingSchemes::fcfs;
-                    break;
-            }
 
             // Add the processes that arrive now to the process list
             while (index < n && listOfProcesses.get(index).arrivalTime <= time) {
@@ -106,7 +115,7 @@ public class Main {
         Process process;
         String id;
         int arrivalTime;
-        int burstTime;
+        int serviceTime;
 
         try {
             File fileObject = new File(path);
@@ -118,8 +127,8 @@ public class Main {
                 if (fields.length >= 3) {
                     id = fields[0];
                     arrivalTime = Integer.parseInt(fields[1]);
-                    burstTime = Integer.parseInt(fields[2]);
-                    process = new Process(id, arrivalTime, burstTime);
+                    serviceTime = Integer.parseInt(fields[2]);
+                    process = new Process(id, arrivalTime, serviceTime);
                     processes.add(process);
                 }
             }
@@ -131,5 +140,36 @@ public class Main {
         }
 
         return processes;
+    }
+
+    private static void exportProcesses(String path, LinkedList<Process> processes) {
+        path = path.replace(".txt", "_out.txt");
+        try {
+            PrintWriter writer = new PrintWriter(path, "UTF-8");
+            String out = "";
+            out = "ID; Arrival Time; Service Time; Start Time; Completion Time; Waiting Time;";
+            writer.println(out);
+            for (Process process : processes) {
+                out = "";
+                String[] data = new String[6];
+                data[0] = process.getId();
+                data[1] = String.valueOf(process.getArrivalTime());
+                data[2] = String.valueOf(process.getServiceTime());
+                data[3] = String.valueOf(process.getStartTime());
+                data[4] = String.valueOf(process.getCompletionTime());
+                data[5] = String.valueOf(process.getWaitingTime());
+                for (String s : data) {
+                    out = out + s + "; ";
+                }
+                writer.println(out);
+            }
+            writer.close();
+        } catch (UnsupportedEncodingException e) {
+            System.out.println("Encoding error.");
+            throw new RuntimeException(e);
+        } catch (FileNotFoundException e) {
+            System.out.println("File not found error.");
+            throw new RuntimeException(e);
+        }
     }
 }

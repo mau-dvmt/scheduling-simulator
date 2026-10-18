@@ -1,8 +1,11 @@
 public class BlankProcess {
     String id;          // The processes identification
     int arrivalTime;    // Time when the process is added to the queue
-    int burstTime;      // Time required for execution
-    int priority;       // Priority of the process
+    int serviceTime;      // Time required for execution
+
+    public String getId() {
+        return id;
+    }
 
     public int getArrivalTime() {
         return arrivalTime;
@@ -13,18 +16,11 @@ public class BlankProcess {
     }
 
     public int getServiceTime() {
-        return burstTime;
+        return serviceTime;
     }
 
     private void setServiceTime(int service_time) {
-        this.burstTime = service_time;
-    }
-    public int getPriority() {
-        return priority;
-    }
-
-    private void setPriority(int service_time) {
-        this.priority = service_time;
+        this.serviceTime = service_time;
     }
 
     // Constructor
@@ -32,26 +28,17 @@ public class BlankProcess {
     }
 
     // Constructor
-    public BlankProcess(String id, int arrivalTime, int burstTime) {
+    public BlankProcess(String id, int arrivalTime, int serviceTime) {
         this.id = id;
         this.arrivalTime = arrivalTime;
-        this.burstTime = burstTime;
-    }
-
-    // Constructor
-    public BlankProcess(String id, int arrivalTime, int burstTime, int priority) {
-        this.id = id;
-        this.arrivalTime = arrivalTime;
-        this.burstTime = burstTime;
-        this.priority = priority;
+        this.serviceTime = serviceTime;
     }
 
     // Copy Constructor
     public BlankProcess(BlankProcess other) {
         this.id = other.id;
         this.arrivalTime = other.arrivalTime;
-        this.burstTime = other.burstTime;
-        this.priority = other.priority;
+        this.serviceTime = other.serviceTime;
     }
 
 }

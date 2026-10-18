@@ -11,20 +11,10 @@ public class SchedulingSchemes {
         this.name = name;
     }
 
-    public Boolean getPreemptive() {
-        return preemptive;
-    }
-
-    public void setPreemptive(Boolean preemptive) {
-        this.preemptive = preemptive;
-    }
-
     String name;
-    Boolean preemptive;
 
-    public SchedulingSchemes(String name, Boolean preemptive) {
+    public SchedulingSchemes(String name) {
         this.name = name;
-        this.preemptive = preemptive;
     }
 
     /** To do:
@@ -32,7 +22,7 @@ public class SchedulingSchemes {
      * Each function should return the process that is to be executed next according to the scheme.
      */
 
-    // First-Come First-Served
+    // First-Come-First-Served
     public static Process fcfs(LinkedList<Process> queue) {
         Process pNext = new Process();
 
@@ -41,8 +31,8 @@ public class SchedulingSchemes {
         return pNext;
     }
 
-    // Shortest Job Next
-    public static Process sjn(LinkedList<Process> queue) {
+    // Shortest Process Next
+    public static Process spn(LinkedList<Process> queue) {
         Process pNext = new Process();
 
         // add your code here
@@ -59,8 +49,8 @@ public class SchedulingSchemes {
         return pNext;
     }
 
-    // Round Robin
-    public static Process rr(LinkedList<Process> queue) {
+    // Highest Response Ratio Next
+    public static Process hrrn(LinkedList<Process> queue) {
         Process pNext = new Process();
 
         // add your code here
@@ -68,11 +58,8 @@ public class SchedulingSchemes {
         return pNext;
     }
 
-    /** To do for VG:
-     * Also implement Priority Scheduling.
-     */
-    // Priority Scheduling
-    public static Process ps(LinkedList<Process> queue) {
+    // Round Robin
+    public static Process rr(LinkedList<Process> queue) {
         Process pNext = new Process();
 
         // add your code here
