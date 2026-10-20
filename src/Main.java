@@ -34,10 +34,6 @@ public class Main {
         run(listOfProcesses, scheme, preemptive, 1);
     }
 
-    /** To do for VG:
-     * Implement the usage of quantum.
-     * run() should work for any (feasible) positive integer quantum.
-     */
     public static void run(LinkedList<Process> listOfProcesses,
                            SchedulingSchemes scheme,
                            Boolean preemptive,
@@ -104,12 +100,6 @@ public class Main {
     }
 
     // To import processes from file
-    /** To do:
-     * If you implement priority scheduling, adapt this
-     * to fit the format of data/prioritized_processes.txt
-     * each line contains 4 parameters, separated by semicolons:
-     * id; arrivalTime; burstTime; priority
-     */
     private static LinkedList<Process> loadProcesses(String path) {
         LinkedList<Process> processes = new LinkedList<>();
         Process process;
